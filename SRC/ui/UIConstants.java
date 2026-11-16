@@ -13,7 +13,6 @@ public class UIConstants {
     public static final Color PRIMARY    = Color.decode("#3E668F");
 
     public static final Color TEXT       = new Color(35, 45, 70);
-    public static final Color HINT       = new Color(90, 105, 140);
     public static final Color SUCCESS    = new Color(30, 120, 70);
     public static final Color ERROR      = new Color(170, 40, 40);
 
