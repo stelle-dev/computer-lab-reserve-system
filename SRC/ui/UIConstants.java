@@ -36,8 +36,6 @@ public class UIConstants {
         button.setBorderPainted(false);
     }
 
-    // Applies the body font to components we don't style by hand
-    // (menus, tabs, dialogs, tooltips, fields, dropdowns, lists)
     public static void applyGlobalFont() {
         String[] keys = {
             "Label.font", "Button.font", "TextField.font", "TextArea.font",
