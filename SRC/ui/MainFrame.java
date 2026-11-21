@@ -8,6 +8,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import logic.ReservationManager;
 import model.Lab;
 
