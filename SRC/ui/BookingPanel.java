@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -19,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import logic.ReservationManager;
 import model.ClassReservationSlot;
 import model.IndividualStudentSlot;
@@ -204,10 +202,19 @@ public class BookingPanel extends JPanel {
     // Call this after loading data from a file
     public void refreshList() {
         listModel.clear();
+        int maxId = 0;
         for (Reservation r : manager.getAllReservations()) {
             listModel.addElement(r);
+            try {
+                int num = Integer.parseInt(r.getReservationId().replaceAll("\\D+", ""));
+                if (num > maxId) {
+                    maxId = num;
+                }
+            } catch (NumberFormatException ignored) {
+                // Skips IDs that don't contain numbers
+            }
         }
-        nextId = manager.getAllReservations().size() + 1;
+        nextId = maxId + 1;
     }
 
     private String describe(Reservation r) {

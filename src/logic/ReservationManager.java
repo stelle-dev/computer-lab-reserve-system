@@ -1,11 +1,10 @@
 package logic;
 
-import model.Lab;
-import model.TimeSlot;
-import model.Reservation;
-import model.InvalidSlotException;
-
 import java.util.ArrayList;
+import model.InvalidSlotException;
+import model.Lab;
+import model.Reservation;
+import model.TimeSlot;
 
 public class ReservationManager {
 
@@ -83,6 +82,48 @@ public class ReservationManager {
     // ==========================================
     // 3. SEARCH & FILTERING METHODS (to be added)
     // ==========================================
+
+    public ArrayList<Reservation> getReservationsByLab(String labId) {
+        ArrayList<Reservation> result = new ArrayList<>();
+        for (Reservation r : reservations) {
+            if (r.getLab().getLabId().equalsIgnoreCase(labId)) {
+                result.add(r);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Reservation> getReservationsByUser(String reservedBy) {
+        ArrayList<Reservation> result = new ArrayList<>();
+        for (Reservation r : reservations) {
+            if (r.getReservedBy().equalsIgnoreCase(reservedBy)) {
+                result.add(r);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<TimeSlot> getAvailableSlots(Lab lab, ArrayList<TimeSlot> allSlots) {
+        ArrayList<TimeSlot> available = new ArrayList<>();
+        if (lab == null || allSlots == null) {
+            return available;
+        }
+
+        for (TimeSlot slot : allSlots) {
+            boolean isBooked = false;
+            for (Reservation r : reservations) {
+                if (r.getLab().getLabId().equalsIgnoreCase(lab.getLabId()) &&
+                    r.getTimeSlot().getSlotId().equalsIgnoreCase(slot.getSlotId())) {
+                    isBooked = true;
+                    break;
+                }
+            }
+            if (!isBooked) {
+                available.add(slot);
+            }
+        }
+        return available;
+    }
 
     // ==========================================
     // 4. SUMMARY REPORT GENERATION

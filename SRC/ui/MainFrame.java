@@ -1,5 +1,9 @@
 package ui;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -8,9 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
+import logic.FileHandler;
 import logic.ReservationManager;
 import model.Lab;
 
@@ -25,14 +27,24 @@ public class MainFrame extends JFrame {
         setSize(650, 550);
         setLocationRelativeTo(null);
 
-        // temp sample data
-        // TO ADD: replace w FileHandler, then call booking.refreshList()
-        manager.addLab(new Lab("LAB1", "Room 101", 30));
-        manager.addLab(new Lab("LAB2", "Room 102", 40));
+        // Load saved data, or fall back to sample labs on first run
+        try {
+            if (!FileHandler.loadData(manager)) {
+                manager.addLab(new Lab("LAB1", "Room 101", 30));
+                manager.addLab(new Lab("LAB2", "Room 102", 40));
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Could not load saved data: " + ex.getMessage(),
+                "Load Error", JOptionPane.WARNING_MESSAGE);
+            manager.addLab(new Lab("LAB1", "Room 101", 30));
+            manager.addLab(new Lab("LAB2", "Room 102", 40));
+        }
 
         // both panels receive the same manager
         booking = new BookingPanel(manager);
         report = new LabReportPanel(manager);
+        booking.refreshList();
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(UIConstants.BODY_FONT);
@@ -73,7 +85,13 @@ public class MainFrame extends JFrame {
         int choice = JOptionPane.showConfirmDialog(this,
             "Exit the program?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
-            // TO ADD: storage class (FileHandler) with try/catch
+            try {
+                FileHandler.saveData(manager);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error saving data: " + ex.getMessage(),
+                    "Save Error", JOptionPane.ERROR_MESSAGE);
+            }
             dispose();
             System.exit(0);
         }
