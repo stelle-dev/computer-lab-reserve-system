@@ -17,4 +17,9 @@
    ```bash
    cd src
 
-   
+### Group members:
+1. Bade, Praisethel
+2. Cruz, Thadd
+3. Escuadra, Ernest
+4. Megriño, Anthony
+5. Nicolas, Mirkyla
